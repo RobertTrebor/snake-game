@@ -76,6 +76,12 @@ function draw() {
     if (d == "RIGHT") snakeX += box;
     if (d == "DOWN") snakeY += box;
 
+    // Wrap the snake's position to the opposite side if it goes out of bounds
+    if (snakeX < 0) snakeX = 17 * box;
+    if (snakeX >= 18 * box) snakeX = 0;
+    if (snakeY < 0) snakeY = 17 * box;
+    if (snakeY >= 18 * box) snakeY = 0;
+
     // Check if the snake eats the food
     if (snakeX == food.x && snakeY == food.y) {
         score++;
@@ -95,8 +101,8 @@ function draw() {
         y: snakeY
     };
 
-    // Check for game over conditions
-    if (snakeX < 0 || snakeX >= 18 * box || snakeY < 0 || snakeY >= 18 * box || collision(newHead, snake)) {
+    // Check for game over conditions (collision with itself)
+    if (collision(newHead, snake)) {
         clearInterval(game);
     }
 
