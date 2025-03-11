@@ -64,4 +64,50 @@ function draw() {
 
     // Draw the food
     ctx.fillStyle = "red";
-    ctx.fillRect(food.x, food.y, box,
+    ctx.fillRect(food.x, food.y, box, box);
+
+    // Get the current head position of the snake
+    let snakeX = snake[0].x;
+    let snakeY = snake[0].y;
+
+    // Update the head position based on the direction
+    if (d == "LEFT") snakeX -= box;
+    if (d == "UP") snakeY -= box;
+    if (d == "RIGHT") snakeX += box;
+    if (d == "DOWN") snakeY += box;
+
+    // Check if the snake eats the food
+    if (snakeX == food.x && snakeY == food.y) {
+        score++;
+        // Generate new food position
+        food = {
+            x: Math.floor(Math.random() * 17 + 1) * box,
+            y: Math.floor(Math.random() * 15 + 3) * box
+        };
+    } else {
+        // Remove the tail of the snake
+        snake.pop();
+    }
+
+    // Add new head to the snake
+    let newHead = {
+        x: snakeX,
+        y: snakeY
+    };
+
+    // Check for game over conditions
+    if (snakeX < 0 || snakeX >= 18 * box || snakeY < 0 || snakeY >= 18 * box || collision(newHead, snake)) {
+        clearInterval(game);
+    }
+
+    // Add the new head to the snake
+    snake.unshift(newHead);
+
+    // Draw the score
+    ctx.fillStyle = "white";
+    ctx.font = "45px Changa one";
+    ctx.fillText(score, 2 * box, 1.6 * box);
+}
+
+// Call the draw function every 100 milliseconds
+let game = setInterval(draw, 100);
